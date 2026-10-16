@@ -105,3 +105,9 @@ test("deep malicious brace nesting does not exhaust the JavaScript stack", () =>
   assert.throws(() => globSync(pattern, { onlyDirectories: true }), /safe 128-level limit/);
   assert.throws(() => adapter.braces("{".repeat(65537), { expand: true, nodupes: true }), SyntaxError);
 });
+
+test("quoted literals cannot bypass the patched expander's output memory bound", () => {
+  const pattern = "{a,b}".repeat(12) + '"' + "x".repeat(1024) + '"';
+  assert.throws(() => adapter.braces(pattern, { expand: true, nodupes: true }),
+    /Restored glob expansion exceeds the safe output limit/);
+});

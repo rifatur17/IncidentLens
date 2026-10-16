@@ -1,6 +1,6 @@
 "use strict";
 
-const { expand } = require("brace-expansion");
+const { expand, EXPANSION_MAX_LENGTH } = require("brace-expansion");
 const picomatch = require("picomatch");
 const { randomUUID } = require("node:crypto");
 
@@ -61,7 +61,18 @@ function braces(pattern, options = {}) {
   if (pattern.length > 65536) throw new SyntaxError("Glob pattern exceeds the original 64 KiB limit");
   if (!pattern.includes("{") || !pattern.includes("}")) return [pattern];
   const protectedPattern = protectLiterals(pattern);
-  return [...new Set(expand(protectedPattern.pattern).map(protectedPattern.restore))];
+  const results = new Set();
+  let length = 0;
+  for (const expanded of expand(protectedPattern.pattern)) {
+    const restored = protectedPattern.restore(expanded);
+    if (results.has(restored)) continue;
+    length += restored.length;
+    if (length > EXPANSION_MAX_LENGTH) {
+      throw new RangeError("Restored glob expansion exceeds the safe output limit");
+    }
+    results.add(restored);
+  }
+  return [...results];
 }
 
 module.exports = { braces, makeRe: picomatch.makeRe, scan: picomatch.scan };

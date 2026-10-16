@@ -14,7 +14,9 @@ and character classes without a recursive parser. Empty expansions are filtered
 by fast-glob itself, just as before. Resource limits in the patched expander and
 the original 64 KiB input ceiling remain in force. Pathological brace nesting
 beyond 128 levels is rejected explicitly before expansion or matching, including
-when reached through Next's real glob dependency.
+when reached through Next's real glob dependency. The expander's output memory
+bound is also enforced after restoring quoted literals, so protection tokens
+cannot mask a larger expanded result.
 
 Keeping fast-glob preserves filesystem traversal, absolute paths, Windows path
 normalization, symlink handling, hidden-directory behavior and path formatting.
