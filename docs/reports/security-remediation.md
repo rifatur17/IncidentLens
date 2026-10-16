@@ -56,6 +56,37 @@ The remaining [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw
 
 Restrict lint/build glob patterns and configuration to reviewed repository content. Do not feed request data or untrusted external configuration/patterns to this tooling; do not expose lint tasks as an API. The current path is a development dependency, absent from the production-only audit. This limits exposure but does not fix the vulnerable package. Keep the full high-severity CI audit failing visibly until an upstream patch or a separately evaluated tooling replacement is available.
 
+## Braces parent-package follow-up (2026-10-16)
+
+Fresh `pnpm --filter incidentlens-frontend why braces` identifies one installed version and one chain:
+
+```text
+incidentlens-frontend (devDependency)
+  eslint-config-next@16.3.8
+    @next/eslint-plugin-next@16.3.8
+      fast-glob@3.3.1
+        micromatch@4.0.8
+          braces@3.0.3
+```
+
+Checked official npm registry metadata before attempting any dependency mutation:
+
+| Candidate | Published version checked | Does it remove the vulnerable dependency? |
+|---|---|---|
+| braces | latest 3.0.3 | No published patched release; do not use the audit's unavailable 3.0.4 suggestion. |
+| micromatch | latest 4.0.8 | No: depends on braces `^3.0.3`. |
+| fast-glob | latest 3.3.3 | No: depends on micromatch `^4.0.8`. |
+| @next/eslint-plugin-next | latest stable 16.4.2 | No: still pins fast-glob 3.3.1. |
+| eslint-config-next | latest stable 16.4.2 | No: depends on @next/eslint-plugin-next 16.4.2, retaining the same chain. |
+
+Sources: [braces](https://registry.npmjs.org/braces/latest), [micromatch](https://registry.npmjs.org/micromatch/latest), [fast-glob](https://registry.npmjs.org/fast-glob/latest), [Next ESLint plugin](https://registry.npmjs.org/@next/eslint-plugin-next/latest), [Next ESLint config](https://registry.npmjs.org/eslint-config-next/latest). These `latest` endpoints may change; versions above record this assessment, not a promise about later releases.
+
+No compatible published update in this chain addresses the advisory, so no dependency/lockfile changes are justified by this review. Replacing braces with brace-expansion would substitute a different API, not a compatible fix. Removing Next's ESLint rules or inventing a parser patch would need separate compatibility and security analysis and must not be used merely to make the audit green.
+
+The risk is process termination when a sufficiently nested untrusted glob reaches the parser's recursive walkers. This project's frontend ESLint configuration imports Next's standard rules and supplies fixed ignore patterns; it does not accept HTTP request patterns. Keep all lint configuration and glob inputs reviewed, run tooling with ordinary least-privilege development/CI permissions, and never expose it as a request-driven service. This reduces exposure; it does not resolve the advisory. Keep the full dependency audit and security scanning enabled. Recheck the registry/advisory before applying a future published patch.
+
+Follow-up local checks: backend 23 tests and frontend 8 unit tests passed; lint, mypy, TypeScript, production build, benchmark reproduction, Python dependency audit and both scanner regressions passed. Fresh full audit still reports **1 high**; production-only audit reports **0**. GitHub at starting commit b316cc0 confirmed CI success and Security failure at the full dependency audit. All 4 desktop/mobile browser tests passed again. Subsequent workflow results are recorded in the delivery report.
+
 ## Full-history secret scanning
 
 The action v3 builds `--no-merges --first-parent baseRef^..headRef`. The initial migrated push selected original root `29d35b5cbf3e3efc06971af6e2b57f26586f0622` as base; its nonexistent parent caused an ambiguous revision error. `fetch-depth: 0` cannot manufacture a root parent.
