@@ -1,14 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 test("demo investigation exposes evidence, timeline, evaluation, architecture, and 404", async ({ page }) => {
+  let releaseInvestigation!: () => void;
+  const investigationGate = new Promise<void>((resolve) => { releaseInvestigation = resolve; });
   await page.route("**/api/v1/investigations", async (route) => {
-    await new Promise((resolve) => setTimeout(resolve, 350));
+    await investigationGate;
     await route.continue();
   });
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /your app broke after a deployment/i })).toBeVisible();
   await page.getByRole("link", { name: /investigate demo incident/i }).first().click();
-  await expect(page.getByText(/reading incident evidence/i)).toBeVisible();
+  try {
+    await expect(page.getByText(/reading incident evidence/i)).toBeVisible();
+  } finally {
+    releaseInvestigation();
+  }
   await expect(page.getByText(/three-letter currency codes/i)).toBeVisible();
   await expect(page.getByRole("heading", { name: /why this conclusion is credible/i })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Incident timeline" })).toBeVisible();
