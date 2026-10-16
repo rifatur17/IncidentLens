@@ -1,0 +1,9 @@
+{
+  "name": "@incidentlens/eslint-glob-compat",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.cjs",
+  "scripts": { "test": "node --test test.cjs" },
+  "dependencies": { "brace-expansion": "5.0.12", "picomatch": "2.3.2" },
+  "engines": { "node": ">=22" }
+}

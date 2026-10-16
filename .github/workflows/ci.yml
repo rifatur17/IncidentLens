@@ -36,6 +36,7 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @incidentlens/eslint-glob-compat test
       - run: pnpm --dir frontend lint
       - run: pnpm --dir frontend typecheck
       - run: pnpm --dir frontend test

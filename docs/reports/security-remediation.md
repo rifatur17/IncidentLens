@@ -1,5 +1,11 @@
 # Security remediation â€” 2026-10-16
 
+**Current follow-up:** the blocked assessment below is historical. A scoped
+workspace adapter now retains fast-glob/Picomatch behavior while replacing its
+vulnerable brace-expansion path with patched brace-expansion 5.0.12. The full local
+dependency audit reports zero findings; compatibility and security regressions
+are enforced in CI. See [the adapter documentation](../../tools/eslint-glob-compat/README.md).
+
 ## Scope and baseline
 
 Reviewed clean `main` at migration commit `c63ec667e8ad6b00a7c788fc5999b41af0cb5085`, both manifests, the lockfile, workspace policies, the original Security logs, and GitHub CI. Original migration CI completed successfully (backend, frontend, browser jobs); Security failed at Gitleaks before the audits ran. Fresh local audit reproduced 29 findings: 2 critical, 12 high, 11 moderate, 4 low.

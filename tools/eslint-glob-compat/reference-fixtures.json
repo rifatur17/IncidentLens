@@ -1,0 +1,134 @@
+[
+  {
+    "pattern": "apps/*",
+    "expected": [
+      "apps/01",
+      "apps/02",
+      "apps/03",
+      "apps/04",
+      "apps/05",
+      "apps/1",
+      "apps/2",
+      "apps/3",
+      "apps/4",
+      "apps/5",
+      "apps/site-a",
+      "apps/site-b",
+      "apps/space name"
+    ]
+  },
+  {
+    "pattern": "apps/{site-a,site-b}",
+    "expected": [
+      "apps/site-a",
+      "apps/site-b"
+    ]
+  },
+  {
+    "pattern": "apps/{01..03}",
+    "expected": [
+      "apps/01",
+      "apps/02",
+      "apps/03"
+    ]
+  },
+  {
+    "pattern": "apps/{01..05..2}",
+    "expected": [
+      "apps/01",
+      "apps/03",
+      "apps/05"
+    ]
+  },
+  {
+    "pattern": "apps/{1..5..2}",
+    "expected": [
+      "apps/1",
+      "apps/3",
+      "apps/5"
+    ]
+  },
+  {
+    "pattern": "apps/@(site-a|site-b)",
+    "expected": [
+      "apps/site-a",
+      "apps/site-b"
+    ]
+  },
+  {
+    "pattern": "apps/!(site-b)",
+    "expected": [
+      "apps/.hidden",
+      "apps/01",
+      "apps/02",
+      "apps/03",
+      "apps/04",
+      "apps/05",
+      "apps/1",
+      "apps/2",
+      "apps/3",
+      "apps/4",
+      "apps/5",
+      "apps/site-a",
+      "apps/space name"
+    ]
+  },
+  {
+    "pattern": "apps/**",
+    "expected": [
+      "apps/01",
+      "apps/02",
+      "apps/03",
+      "apps/04",
+      "apps/05",
+      "apps/1",
+      "apps/2",
+      "apps/3",
+      "apps/4",
+      "apps/5",
+      "apps/site-a",
+      "apps/site-a/pages",
+      "apps/site-b",
+      "apps/site-b/pages",
+      "apps/space name"
+    ]
+  },
+  {
+    "pattern": "apps/site-a",
+    "expected": [
+      "apps/site-a"
+    ]
+  },
+  {
+    "pattern": "./apps/site-a",
+    "expected": [
+      "./apps/site-a"
+    ]
+  },
+  {
+    "pattern": "apps/site-a/",
+    "expected": [
+      "apps/site-a/"
+    ]
+  },
+  {
+    "pattern": ".",
+    "expected": [
+      "."
+    ]
+  },
+  {
+    "pattern": "apps/.*",
+    "expected": [
+      "apps/.hidden"
+    ]
+  },
+  {
+    "pattern": "!apps/site-a",
+    "expected": []
+  },
+  {
+    "pattern": "apps/missing",
+    "expected": []
+  }
+]

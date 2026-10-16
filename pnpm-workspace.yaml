@@ -1,7 +1,9 @@
 packages:
   - frontend
+  - tools/eslint-glob-compat
 allowBuilds:
   unrs-resolver: true
 # Keep minimatch's compatible 5.x dependency on the published security patch.
 overrides:
   brace-expansion@>=5.0.0 <5.0.12: 5.0.12
+  'fast-glob@3.3.1>micromatch': workspace:@incidentlens/eslint-glob-compat@*
