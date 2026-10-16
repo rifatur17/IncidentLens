@@ -12,6 +12,8 @@
 
 ![IncidentLens investigation workspace](docs/assets/incidentlens-investigation.png)
 
+This repository is maintained at [rifatur17/IncidentLens](https://github.com/rifatur17/IncidentLens) as a history-preserving copy of [Niloy-Bhuiyan/IncidentLens](https://github.com/Niloy-Bhuiyan/IncidentLens). Original commit authorship and the MIT copyright notice are retained. Hosted demo links below refer to the upstream deployments; copying this repository does not create a new deployment.
+
 Your app broke after a deployment. IncidentLens investigates the logs, source code, recent commits, deployment metadata, and previous incidents to find the most likely reason—then lets you open the evidence behind every claim.
 
 **Try it:** [Investigate the hosted checkout incident](https://incidentlens-nine.vercel.app/investigations/demo). No API key or paid model is required.
@@ -178,7 +180,7 @@ scripts/            benchmark consistency and security gates
 Prerequisites: Node.js 22+, pnpm 11, and Python 3.12–3.14.
 
 ```bash
-git clone https://github.com/Niloy-Bhuiyan/IncidentLens.git
+git clone https://github.com/rifatur17/IncidentLens.git
 cd IncidentLens
 cp .env.example .env
 pnpm install
@@ -194,6 +196,25 @@ pnpm --dir frontend dev
 ```
 
 Open [localhost:3000](http://localhost:3000) and [localhost:8000/docs](http://localhost:8000/docs).
+
+### Windows PowerShell without global tool installation
+
+Use a project-local Python environment and the repository's pinned pnpm version:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e "backend[dev]"
+npm exec --yes --package=pnpm@11.19.0 -- pnpm install --frozen-lockfile
+.\.venv\Scripts\python.exe -m uvicorn backend.app.main:app --port 8000
+```
+
+In a second terminal in the same repository, start the frontend:
+
+```powershell
+npm exec --yes --package=pnpm@11.19.0 -- pnpm --dir frontend dev
+```
+
+The default deterministic provider needs no API key. Keep any real provider credentials only in an ignored local environment file or process environment. These commands do not require activating the virtual environment or changing the system PATH.
 
 ### Environment variables
 

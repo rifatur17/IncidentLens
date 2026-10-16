@@ -36,3 +36,7 @@ evaluation/results/*.tmp
 CLAUDE.md
 AGENTS.md
 .mcp.json
+
+# Local editor state
+.idea/
+.vscode/
