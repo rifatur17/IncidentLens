@@ -1,3 +1,14 @@
+<!-- BEGIN animated project showcase -->
+<picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 600px)" srcset=".github/showcase/still-overview-mobile.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset=".github/showcase/still-overview.svg">
+  <source media="(max-width: 600px)" srcset=".github/showcase/overview-mobile.svg">
+  <img src=".github/showcase/overview.svg" width="1200" alt="IncidentLens — animated workflow illustration, not live telemetry.">
+</picture>
+
+**My contribution:** dependency security, compatibility and CI maintenance. [Niloy Bhuiyan’s upstream authorship](https://github.com/Niloy-Bhuiyan/IncidentLens) and existing deployment attribution are retained.
+<!-- END animated project showcase -->
+
 <div align="center">
   <img src="frontend/public/images/mark.svg" width="72" alt="IncidentLens logo" />
   <h1>IncidentLens</h1>
